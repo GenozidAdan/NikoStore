@@ -468,29 +468,43 @@ body {
 
 
 .card-back {
-  position: relative;
-  overflow-y: auto; /* para que pueda hacer scroll si hay contenido */
+  position: relative; /* Necesario para posicionar el hint dentro */
+  overflow-y: auto;
 }
 
+
 .scroll-hint {
+  display: none;
+  font-size: 0.7rem;
+  color: #fff;
+  border-radius: 2px;
+  animation: pulse 1.5s infinite;
+
+}
+
+/* Cuando está en el flujo dentro de card-body */
+.scroll-hint.inside-flow {
+  display: block;
+  position: static;
+  transform: none;
+}
+
+/* Cuando está flotando arriba en card-back */
+.scroll-hint.visible:not(.inside-flow) {
+  display: inline-block;
   position: absolute;
-  top: 10px;  /* se muestra en la parte superior */
-  right: 10px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.7);
-  color: #333;
-  padding: 3px 8px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 10;
 }
 
-.scroll-hint.visible {
-  opacity: 1;
-  pointer-events: auto;
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
+
