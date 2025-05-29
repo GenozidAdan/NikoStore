@@ -88,46 +88,60 @@ window.addEventListener('load', function() {
 // Detectar si es dispositivo táctil 
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-document.querySelectorAll('.product-card').forEach(card => {
-    if (isTouchDevice) {
-        card.addEventListener('click', function() {
-            this.querySelector('.card-inner').classList.toggle('flipped');
+if (isTouchDevice) {
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', function () {
+            const clickedInner = this.querySelector('.card-inner');
+
+            // Cierra todas las demás cards
+            document.querySelectorAll('.card-inner.flipped').forEach(openCard => {
+                if (openCard !== clickedInner) {
+                    openCard.classList.remove('flipped');
+                }
+            });
+
+            // Alterna la card actual (abre si está cerrada, cierra si ya estaba abierta)
+            clickedInner.classList.toggle('flipped');
         });
-    }
-});
+    });
+}
 
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Detectar si es móvil (simple)
-  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
-  if (!isMobile) return; // Si no es móvil, no mostrar nada
+window.addEventListener('load', () => {
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if (!isTouchDevice) return;
 
   const cardsBack = document.querySelectorAll('.card-back');
 
-  cardsBack.forEach((cardBack, index) => {
+  cardsBack.forEach((cardBack) => {
     const scrollHint = cardBack.querySelector('.scroll-hint');
+    const cardBody = cardBack.querySelector('.card-body');
+    const cardTitle = cardBack.querySelector('.card-title');
+    if (!scrollHint || !cardBody || !cardTitle) return;
 
-    if (!scrollHint) return;
+    const hasVerticalScroll = cardBody.scrollHeight > cardBody.clientHeight;
 
-    // Mostrar hint solo si hay scroll vertical
-    const hasScroll = cardBack.scrollHeight > cardBack.clientHeight;
-
-    if (hasScroll) {
+    if (hasVerticalScroll) {
       scrollHint.classList.add('visible');
+
+      // Mover scroll-hint justo encima de .card-title
+      if (!cardBody.contains(scrollHint)) {
+        cardBody.insertBefore(scrollHint, cardTitle);
+        scrollHint.classList.add('inside-flow');
+      }
     } else {
       scrollHint.classList.remove('visible');
     }
 
-    // Detectar primer toque de scroll para ocultar hint
-    let touched = false;
+    const onFirstScroll = () => {
+      scrollHint.classList.remove('visible');
 
-    cardBack.addEventListener('touchstart', (e) => {
-      if (!touched) {
-        touched = true;
-        scrollHint.classList.remove('visible');
-      }
-    }, { once: true });
+      // Volver a poner scrollHint fuera del flujo para que no deje espacio
+      scrollHint.classList.remove('inside-flow');
+      cardBack.insertBefore(scrollHint, cardBody);
+
+      cardBody.removeEventListener('scroll', onFirstScroll);
+    };
+
+    cardBody.addEventListener('scroll', onFirstScroll, { passive: true });
   });
 });
