@@ -1,59 +1,64 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Crear estrellas dinámicas al hacer hover
+document.addEventListener('DOMContentLoaded', function () {
     const cards = document.querySelectorAll('.product-card');
-    
+
     cards.forEach(card => {
-        card.addEventListener('mouseenter', function(e) {
-            // Crear estrellitas
+        card.addEventListener('mouseenter', function () {
+            // Evita que se creen múltiples sets de estrellas si se pasa el cursor varias veces seguidas
+            if (this.classList.contains('stars-active')) return;
+
+            this.classList.add('stars-active');
+
             for (let i = 0; i < 20; i++) {
                 createStar(this);
             }
+
+            // Permite volver a crear estrellas después de 1 segundo
+            setTimeout(() => {
+                this.classList.remove('stars-active');
+            }, 1000);
         });
     });
-    
+
     function createStar(card) {
         const star = document.createElement('div');
         star.classList.add('star');
-        
-        // Posición aleatoria dentro de la card
+
         const x = Math.random() * card.offsetWidth;
         const y = Math.random() * card.offsetHeight;
-        
-        // Tamaño aleatorio
         const size = Math.random() * 10 + 5;
-        
-        // Estilos de la estrella
-        star.style.left = `${x}px`;
-        star.style.top = `${y}px`;
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
-        star.style.position = 'absolute';
-        star.style.backgroundColor = 'white';
-        star.style.borderRadius = '50%';
-        star.style.opacity = '0';
-        star.style.transform = 'scale(0)';
-        star.style.transition = 'all 0.5s ease-out';
-        star.style.pointerEvents = 'none';
-        
+
+        Object.assign(star.style, {
+            left: `${x}px`,
+            top: `${y}px`,
+            width: `${size}px`,
+            height: `${size}px`,
+            position: 'absolute',
+            backgroundColor: 'white',
+            borderRadius: '50%',
+            opacity: '0',
+            transform: 'scale(0)',
+            transition: 'all 0.5s ease-out',
+            pointerEvents: 'none',
+        });
+
         card.appendChild(star);
-        
-        // Animación
+
         setTimeout(() => {
             star.style.opacity = '0.8';
             star.style.transform = 'scale(1)';
         }, 10);
-        
+
         setTimeout(() => {
             star.style.opacity = '0';
             star.style.transform = 'scale(1.5)';
         }, 500);
-        
-        // Eliminar después de la animación
+
         setTimeout(() => {
             star.remove();
         }, 1000);
     }
 });
+
 
 // Preloader Animation
 window.addEventListener('load', function() {
@@ -80,14 +85,49 @@ window.addEventListener('load', function() {
     }, 2000); // Tiempo que la caja "tiembla" antes de abrirse
 });
 
-// Detectar si es dispositivo táctil
+// Detectar si es dispositivo táctil 
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-// Activar volteo con click en móviles
 document.querySelectorAll('.product-card').forEach(card => {
     if (isTouchDevice) {
         card.addEventListener('click', function() {
             this.querySelector('.card-inner').classList.toggle('flipped');
         });
     }
+});
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Detectar si es móvil (simple)
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+  if (!isMobile) return; // Si no es móvil, no mostrar nada
+
+  const cardsBack = document.querySelectorAll('.card-back');
+
+  cardsBack.forEach((cardBack, index) => {
+    const scrollHint = cardBack.querySelector('.scroll-hint');
+
+    if (!scrollHint) return;
+
+    // Mostrar hint solo si hay scroll vertical
+    const hasScroll = cardBack.scrollHeight > cardBack.clientHeight;
+
+    if (hasScroll) {
+      scrollHint.classList.add('visible');
+    } else {
+      scrollHint.classList.remove('visible');
+    }
+
+    // Detectar primer toque de scroll para ocultar hint
+    let touched = false;
+
+    cardBack.addEventListener('touchstart', (e) => {
+      if (!touched) {
+        touched = true;
+        scrollHint.classList.remove('visible');
+      }
+    }, { once: true });
+  });
 });
