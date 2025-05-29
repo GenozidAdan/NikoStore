@@ -1,0 +1,400 @@
+/* Estilos generales */
+body {
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    color: #fff;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Fondo con imagen */
+.background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../recursos/fondo.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    opacity: 0.9;
+}
+
+/* Contenido principal */
+.main-content {
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Personaje Chuuya - Responsivo */
+.character-container {
+    text-align: center;
+}
+
+.character {
+    max-height: clamp(150px, 12vw, 120px);
+    width: auto;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+}
+
+/* Texto de bienvenida - Responsivo */
+.welcome-text {
+    margin-bottom: 1rem;
+}
+
+.welcome-text h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 600;
+    color: #ff85a2;
+    line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.welcome-text p {
+    font-size: clamp(1.1rem, 2.5vw, 5.8rem);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.welcome-text h2 {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    color: #ff85a2;
+    margin-top: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Cards de productos */
+.cards-container {
+    margin-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+.product-card {
+    aspect-ratio: 1/1; /* Cards cuadradas */
+    height: auto; /* Altura flexible */
+    background: transparent;
+    border: none;
+    perspective: 1000px;
+    cursor: pointer;
+    max-width: 300px; /* Tamaño máximo opcional */
+    margin: 0 auto; /* Centrar las cards */
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.product-card:hover .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-front {
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px; /* Espacio interno */
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo para áreas vacías */
+}
+
+.card-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ajusta la imagen sin cortarla */
+    object-position: center;
+}
+
+.card-back {
+    background-color: rgba(255, 133, 162, 0.9);
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.card-back .card-body {
+    color: white;
+}
+
+.card-back .card-title {
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    margin-top: 1rem;
+}
+
+.card-back .card-text {
+    font-size: clamp(0.7rem, 1.5vw, 1rem);
+}
+
+.card-back .price {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    font-weight: bold;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .product-card {
+        max-width: 100%; /* Ocupa todo el ancho disponible */
+    }
+    
+    .card-back {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .card-front, 
+    .card-back {
+        padding: 10px;
+    }
+    
+    .card-back .card-body {
+        padding: 5px;
+    }
+}
+/* Efecto de estrellitas al hacer hover */
+.product-card:hover::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle, white 10%, transparent 10%);
+    background-size: 20px 20px;
+    animation: stars 1s linear infinite;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    animation: stars 0.5s linear forwards;
+}
+
+@keyframes stars {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.2);
+    }
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .welcome-text h1 {
+        font-size: 2.5rem;
+    }
+    
+    .welcome-text p {
+        font-size: 1.2rem;
+    }
+    
+    .welcome-text h2 {
+        font-size: 1.5rem;
+    }
+    
+    .character {
+        max-height: 200px;
+    }
+    
+    .product-card {
+        height: 300px;
+    }
+}
+
+@media (max-width: 576px) {
+    .welcome-text h1 {
+        font-size: 2rem;
+    }
+    
+    .welcome-text p {
+        font-size: 1rem;
+    }
+    
+    .welcome-text h2 {
+        font-size: 1.2rem;
+    }
+    
+    .character {
+        max-height: 150px;
+    }
+    
+    .product-card {
+        height: 250px;
+    }
+}
+
+
+/* Añade esto al final de tus estilos de cards */
+@media (max-width: 767.98px) {
+    .product-card {
+        height: auto !important; /* Elimina altura fija */
+        aspect-ratio: 1/1; /* Fuerza relación cuadrada */
+    }
+    
+    .card-front img,
+    .card-back {
+        aspect-ratio: 1/1; /* Asegura cuadratura */
+        object-fit: cover; /* Evita deformaciones */
+    }
+}
+
+/* Preloader - Animación de caja */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ff85a2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+
+.box {
+    position: relative;
+    width: 150px;
+    height: 120px;
+    transform-style: preserve-3d;
+    animation: boxShake 2s ease infinite;
+}
+
+.box-lid {
+    position: absolute;
+    width: 150px;
+    height: 30px;
+    background-color: #ff6b8b;
+    top: 0;
+    left: 0;
+    transform-origin: bottom center;
+    transform: rotateX(0deg);
+    transition: transform 1s ease;
+    z-index: 10;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+}
+
+.box-body {
+    position: absolute;
+    width: 150px;
+    height: 90px;
+    background-color: #ff8fa3;
+    bottom: 0;
+    left: 0;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+}
+
+.box-bow {
+    position: absolute;
+    width: 40px;
+    height: 20px;
+    background-color: #fff;
+    top: -10px;
+    left: 55px;
+    border-radius: 50%;
+}
+
+.item-sparkles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, white 10%, transparent 10%);
+    background-size: 20px 20px;
+    opacity: 0;
+}
+
+@keyframes boxShake {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    20% { transform: translateY(-10px) rotate(2deg); }
+    40% { transform: translateY(0) rotate(-2deg); }
+    60% { transform: translateY(-5px) rotate(1deg); }
+    80% { transform: translateY(0) rotate(-1deg); }
+}
+
+/* Animación cuando se abre */
+.preloader.fade-out {
+    opacity: 0;
+}
+
+.preloader.fade-out .box-lid {
+    transform: rotateX(-120deg);
+}
+
+.preloader.fade-out .item-sparkles {
+    animation: sparkles 1s ease forwards;
+}
+
+@keyframes sparkles {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0; transform: scale(1.5); }
+}
+
+/* Indicador para móviles */
+.tap-hint {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    animation: pulse 2s infinite;
+    z-index: 2;
+}
+
+.tap-hint i {
+    color: #ff85a2;
+    font-size: 20px;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Mostrar solo en móviles */
+@media (max-width: 768px) {
+    .product-card .tap-hint {
+        display: flex;
+    }
+    
+    .flipped .tap-hint {
+        display: none;
+    }
+}
+
+/* Reemplaza el hover por esta clase */
+.card-inner.flipped {
+    transform: rotateY(180deg);
+}
